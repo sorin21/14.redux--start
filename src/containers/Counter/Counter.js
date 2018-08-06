@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import {connect} from 'react-redux';
 import CounterControl from "../../components/CounterControl/CounterControl";
 import CounterOutput from "../../components/CounterOutput/CounterOutput";
 
@@ -36,7 +36,7 @@ class Counter extends Component {
   render() {
     return (
       <div>
-        <CounterOutput value={this.state.counter} />
+        <CounterOutput value={this.props.ctr} />
         <CounterControl
           label="Increment"
           clicked={() => this.counterChangedHandler("inc")}
@@ -58,4 +58,41 @@ class Counter extends Component {
   }
 }
 
-export default Counter;
+// will be executed by react redux
+const mapStateToProps = (state) => {
+	return {
+    // we define prop name: ctr 
+    // then we access state
+    // this state arg will be given by react redux
+    // that will rich the redux state
+    // the initilState setup in reducer
+    // so a counter prop will be available
+    // so we take the value of counter and 
+    // we assign it to a prop call ctr
+		ctr: state.counter,
+	};
+};
+
+// This helper func calls dispatch 
+// to store, behind the scene
+// which kind of actions to dispacth in this container
+// the props hold a reference to a function that
+// will be executed to dispatch an action
+// const mapDispatchToProps = (dispatch) => {
+// 	return {
+// 		// return a call to dispatch
+// 		onIncrementCounter: () => dispatch({ type: actionTypes.INCREMENT }),
+// 		onDecrementCounter: () => dispatch({ type: actionTypes.DECREMENT }),
+// 		onAddCounter: () => dispatch({ type: actionTypes.ADD, payload: 10 }),
+// 		onSubstractCounter: () => dispatch({ type: actionTypes.SUBSTRACT, payload: 15 }),
+// 		onStoreResult: (result) => dispatch({ type: actionTypes.STORE_RESULT, result: result }),
+// 		onDeleteResult: (id) => dispatch({ type: actionTypes.DELETE_RESULT, resultElemId: id }),
+// 	};
+// };
+
+// connect is a function that 
+// returns a HOC: Counter
+// connect gives us class container with
+// access to ctr property and allows us to ouput
+// the ctr prop: this.props.ctr
+export default connect(mapStateToProps)(Counter);
